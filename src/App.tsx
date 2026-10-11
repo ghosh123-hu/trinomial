@@ -12,6 +12,7 @@ import VolunteerView from './views/VolunteerView';
 import DashboardView from './views/DashboardView';
 import AIInsightsView from './views/AIInsightsView';
 import OrganizationsView from './views/OrganizationsView';
+import LoginView from './views/LoginView';
 
 import ReportIssueModal from './components/modals/ReportIssueModal';
 import SignPetitionModal from './components/modals/SignPetitionModal';
@@ -33,6 +34,30 @@ export default function App() {
   const [volunteerDrives, setVolunteerDrives] =
     useState<VolunteeringDrive[]>(INITIAL_VOLUNTEER_DRIVES);
   const [selectedIssueId, setSelectedIssueId] = useState<string>('KTV-2024-8841');
+
+  // Authenticated user state
+  const [currentUser, setCurrentUser] = useState<{
+    name: string;
+    email: string;
+    ledgerId: string;
+  } | null>(() => {
+    return {
+      name: 'Priya Sharma',
+      email: 'atharvghosh7@gmail.com',
+      ledgerId: '#BLR-W150-8492',
+    };
+  });
+
+  const handleLoginSuccess = (user: { name: string; email: string; ledgerId: string }) => {
+    setCurrentUser(user);
+    setActiveTab('dashboard');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setActiveTab('login');
+  };
 
   // Modal visibility states
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -120,6 +145,7 @@ export default function App() {
         activeTab={activeTab}
         onNavigate={handleNavigate}
         onOpenReportModal={() => setIsReportModalOpen(true)}
+        currentUser={currentUser}
       />
 
       {/* Main View Container */}
@@ -177,6 +203,15 @@ export default function App() {
         {activeTab === 'insights' && <AIInsightsView />}
 
         {activeTab === 'organizations' && <OrganizationsView />}
+
+        {activeTab === 'login' && (
+          <LoginView
+            onLoginSuccess={handleLoginSuccess}
+            onNavigate={handleNavigate}
+            currentUser={currentUser}
+            onLogout={handleLogout}
+          />
+        )}
       </div>
 
       {/* Footer */}
