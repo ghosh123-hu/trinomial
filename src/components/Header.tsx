@@ -2,20 +2,18 @@ import React from 'react';
 import { KartavyaLogo } from './KartavyaLogo';
 import { USER_PROFILE } from '../data/civicData';
 
-export type ActiveTab = 'home' | 'explore' | 'detail' | 'volunteer' | 'insights' | 'organizations' | 'dashboard' | 'login';
+export type ActiveTab = 'home' | 'explore' | 'detail' | 'volunteer' | 'insights' | 'organizations' | 'dashboard';
 
 interface HeaderProps {
   activeTab: ActiveTab;
   onNavigate: (tab: ActiveTab) => void;
   onOpenReportModal: () => void;
-  currentUser?: { name: string; email: string; ledgerId: string } | null;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   onNavigate,
   onOpenReportModal,
-  currentUser,
 }) => {
   const navItems: { id: ActiveTab; label: string }[] = [
     { id: 'home', label: 'Home' },
@@ -24,7 +22,6 @@ export const Header: React.FC<HeaderProps> = ({
     { id: 'insights', label: 'AI Insights' },
     { id: 'organizations', label: 'Organizations' },
     { id: 'dashboard', label: 'Dashboard' },
-    { id: 'login', label: currentUser ? 'My Account' : 'Sign In' },
   ];
 
   return (
@@ -70,13 +67,13 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
 
             <button
-              onClick={() => onNavigate('login')}
-              title={currentUser ? `Logged in as ${currentUser.name} (${currentUser.email})` : 'Sign In to Citizen Portal'}
-              className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-[#047857] cursor-pointer hover:ring-2 hover:ring-[#F97316] transition-all flex items-center justify-center bg-emerald-50"
+              onClick={() => onNavigate('dashboard')}
+              title={`Logged in as ${USER_PROFILE.name}`}
+              className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-[#047857] cursor-pointer hover:ring-2 hover:ring-[#F97316] transition-all"
             >
               <img
                 src={USER_PROFILE.avatar}
-                alt={currentUser?.name || USER_PROFILE.name}
+                alt={USER_PROFILE.name}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
               />
